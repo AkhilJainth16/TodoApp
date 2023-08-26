@@ -4,7 +4,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const  _ = require("lodash");
-// const date = require(__dirname + "/date.js");
 
 const app = express();
 
@@ -21,12 +20,6 @@ const itemSchema = new mongoose.Schema({
 
 const Item = mongoose.model("Item", itemSchema);
 
-const first = new Item ({
-  name: "Hit + to Add"
-
-// const defaultItems = [first, second, third];
-const defaultItems = [first];
-
 const listSchema = new mongoose.Schema({
   name: String,
   items: [itemSchema]
@@ -34,8 +27,8 @@ const listSchema = new mongoose.Schema({
 
 const List = mongoose.model("List", listSchema);
 
-
 //finding--
+
 app.get("/", function(req,res){
   Item.find()
   .then(function(items){
@@ -55,8 +48,6 @@ app.post("/", function(req, res){
   const item = new Item ({
     name: itemName
   });
-  // console.log(req.body.list);
-
   if(listName === "Today"){
     item.save();
     res.redirect("/");
@@ -72,7 +63,6 @@ app.post("/", function(req, res){
   }
 });
 
-
 //delete items from list--
 
 app.post("/delete", function(req,res){
@@ -82,7 +72,6 @@ app.post("/delete", function(req,res){
   if(listName === "Today"){
     Item.findByIdAndRemove(checkedItemId)
     .then(function(){
-      // console.log(checkedItemId + "item deleted");
       res.redirect("/");
     })
     .catch(function(err){
@@ -97,18 +86,17 @@ app.post("/delete", function(req,res){
       }
 
     })
-
   }
 
 })
 
+// creating a new list for different use--
 
 app.get("/:customListName", function(req, res){
   const customListName = _.capitalize(req.params.customListName);
   List.findOne({name: customListName})
   .then((listInfo) => {
     if (listInfo) {
-      // console.log('Collection exists');
       res.render("list", {listTitle: listInfo.name, newListItems: listInfo.items});
       
     } else {
@@ -118,12 +106,11 @@ app.get("/:customListName", function(req, res){
       });
       list.save();
       res.redirect("/" + customListName);
-      // console.log('Collection does not exist');
+      
     }
   });
 
 });
-
 
 app.listen(3000, function() {
   console.log("Server started on port 3000");
