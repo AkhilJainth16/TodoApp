@@ -13,9 +13,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-// mongoose.connect("mongodb://127.0.0.1:27017/TodoListDB");
 mongoose.connect("mongodb+srv://jainthakhil16:jainthakhil16@cluster0.4ecqvdp.mongodb.net/TodoListDB");
-// mongoose.connect("mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.4ecqvdp.mongodb.net/TodoListDB")
 
 const itemSchema = new mongoose.Schema({
   name: String
@@ -25,17 +23,6 @@ const Item = mongoose.model("Item", itemSchema);
 
 const first = new Item ({
   name: "Hit + to Add"
-});
-/*
-const second = new Item ({
-  name: "Do homework"
-});
-
-const third = new Item ({
-  name: "practice new coding questions"
-});
-
-*/
 
 // const defaultItems = [first, second, third];
 const defaultItems = [first];
@@ -112,17 +99,9 @@ app.post("/delete", function(req,res){
     })
 
   }
-  // console.log(checkedItemId);
- 
- 
+
 })
 
-
-// app.get("/work", function(req,res){
-//   res.render("list", {listTitle: "Work List", newListItems: workItems});
-// });
-
-// creating a new list for different use--
 
 app.get("/:customListName", function(req, res){
   const customListName = _.capitalize(req.params.customListName);
@@ -143,18 +122,9 @@ app.get("/:customListName", function(req, res){
     }
   });
 
-  
-
 });
 
 
-  /*
- 
-
-  list.save();
-  */
-  
-  // console.log(customListName);
 app.listen(3000, function() {
   console.log("Server started on port 3000");
 });
